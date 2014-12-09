@@ -42,7 +42,7 @@ game.PlayerEntity = me.Entity.extend({
         
        if(!this.big){
        if(this.body.vel.x !== 0){
-            if (!this.renderable.isCurrentAnimation("smallWalk") && !this.renderable.isCurrentAnimation("grow") && !this.isCurrentAnimation("shrink")) {
+            if (!this.renderable.isCurrentAnimation("smallWalk") && !this.renderable.isCurrentAnimation("grow") && !this.renderable.isCurrentAnimation("shrink")) {
                 this.renderable.setCurrentAnimation("smallWalk");
                 this.renderable.setAnimationFrame();
             }
@@ -75,8 +75,7 @@ game.PlayerEntity = me.Entity.extend({
        if(response.b.type === 'badguy'){
            if(ydif <= -115){
                response.b.alive = false;
-           }else{
-               if(this.big){
+           }else if(this.big){
                    this.big = false;
                    this.body.vel.y -= this.body.accel.y * me.timer.tick;
                    this.jumping = true;
@@ -85,7 +84,11 @@ game.PlayerEntity = me.Entity.extend({
            }else{
            
            me.state.change(me.state.MENU);
-        }
+        
+           }
+   /*
+    * dont mess with this it will mess up your project up!!!!
+    */
    
     }else if(response.b.type === 'mushroom'){
         this.renderable.setCurrentAnimation("grow",  "BigIdle");

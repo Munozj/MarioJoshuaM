@@ -15,7 +15,7 @@ var game = {
 	if (!me.video.init("screen",  me.video.CANVAS, 1067, 600, true, '1.0')) {
 		alert("Your browser does not support HTML5 canvas.");
 		return;
-	}
+	}5
 
 	// add "#debug" to the URL to enable the debug Panel
 	if (document.location.hash === "#debug") {
