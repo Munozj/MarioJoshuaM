@@ -52,7 +52,18 @@ game.PlayerEntity = me.Entity.extend({
    },
    
    collideHandler: function(response){
+       var ydif = this.pos.y - response.b.pos.y;
+       console.log(ydif);
        
+       if(response.b.type === 'badguy'){
+           if(ydif <= -115){
+               response.b.alive = false;
+           }else{
+               
+           }
+           
+           me.state.change(me.state.MENU);
+       }
    }
     
 });
@@ -89,13 +100,52 @@ game.BadGuy = me.Entity.extend({
        }]);
    
        this.spritewidth = 60;
+       var width = settings.width;
        x = this.pos.x;
-       this.endX =
+       this.startX = x;
+       this.endX = x + width - this.spritewidth;
+       this.pos.x = x + width - this.spritewidth;
+       this.updateBounds();
+       
+       this.alwaysUpdate = true;
+       
+       this.walkLeft = false;
+       this.alive = true;
+       this.type = "badguy";
+ 
+      // this.renderable.addAnimation("run", [0, 1, 2], 80);
+      //this.renderable.setCurrentAnimation("run");
    
+      this.body.setVelocity(4, 6);
    },
    
    update: function(delta){
+       this.body.update(delta);
+       me.collision.check(this, true, this.collideHandler,bind(this), true);
+       
+       if(this.alive){
+           if(this.walkLeft && this.pos.x <= this.startX){
+               this.walkLeft = false;
+           }else if(!this.walkLeft && this.pos.x >= this.endX){
+               this.walkLeft = true;
+           }
+           this.flipX(!this.walkLeft);
+           this.body.vel.x += (this.walkLeft) ? -this.body.accel.x * me.timer.tick : this.body.accel.x *me.timer.tick;
+           
+       }else{
+           mee.game.world.removeChild(this);
+       }
+       
+       
+       this._super(me.Entity, "update", [delta]);
+       return true;
+   },
+   
+   collideHandler: function(){
        
    }
+   
+   
+   
    
 });
